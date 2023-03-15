@@ -1,5 +1,7 @@
 # Brainfuck Interpreter in Rust
 
+*I did this mini project to lear about Rust.*
+
 This program is a Brainfuck interpreter implemented in Rust. Brainfuck is an esoteric programming language with only eight instructions, making it very simple yet challenging to program in.
 
 The program reads in a Brainfuck file, parses the instructions, and then executes them.
@@ -17,7 +19,7 @@ Replace `<filename.bf>` with the path to the Brainfuck file you want to execute.
 
 ## Implementation
 
-The interpreter is implemented according to the Wikipedia page on Brainfuck: https://en.wikipedia.org/wiki/Brainfuck.
+The interpreter is implemented according to the Wikipedia page on Brainfuck: https://en.wikipedia.org/wiki/Brainfuck with minor deviation described [below](#deviation-from-brainfuck-standard).
 
 The program reads in the contents of the Brainfuck file and converts each character to an instruction. It then executes the instructions using a `BrainfuckedState` struct, which keeps track of the current state of the interpreter.
 
@@ -42,6 +44,12 @@ The interpreter supports the following Brainfuck instructions:
 - `,`: Input a character and store it in the byte at the data pointer.
 - `[`: Jump past the matching `]` if the byte at the data pointer is zero.
 - `]`: Jump back to the matching `[` if the byte at the data pointer is nonzero.
+
+## Deviation from Brainfuck standard
+### Memory
+The interpreter uses a vector of bytes to represent the program's memory. The vector is dynamically sized and can grow (not shrink) as needed, meaning that the memory is essentially unlimited in both directions, up to a maximum length of `usize` (which realistically no computer can handle).
+### Loops
+In addition to the standard Brainfuck loops with square brackets (`[` and `]`), this interpreter also supports loops with curly braces (`{` and `}`) and parentheses (`(` and `)`). These loops work in the same way as the square bracket loops, allowing for more "readable" brainfuck code.
 
 ## License
 
