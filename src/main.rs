@@ -1,7 +1,7 @@
 //implementation according to:
 //https://en.wikipedia.org/wiki/Brainfuck
 
-use std::{env, fs, convert::identity, io::{stdin, Read}};
+use std::{env, fs, convert::identity, io::{stdin, Read, self, Write}};
 
 
 #[derive(PartialEq)]
@@ -72,8 +72,12 @@ impl BrainfuckedState {
                 },
                 Instruction::IncrementData => self.data[self.data_ptr] = self.data[self.data_ptr].wrapping_add(1),
                 Instruction::DecrementData => self.data[self.data_ptr] = self.data[self.data_ptr].wrapping_sub(1),
-                Instruction::OutputData => print!("{}", self.data[self.data_ptr] as char),
+                Instruction::OutputData => {
+                    let output_char = self.data[self.data_ptr] as char;
+                    io::stdout().write(format!("{}", output_char).as_bytes()).unwrap();
+                },
                 Instruction::InputData => {
+                    io::stdout().flush().unwrap();
                     let mut buffer = [0 as u8];
                     _ = stdin().read(&mut buffer);
                     self.data[self.data_ptr] = buffer[0];
@@ -107,6 +111,7 @@ impl BrainfuckedState {
             }
             self.code_ptr += 1;
         }
+        io::stdout().flush().unwrap();
     }
 }
 
